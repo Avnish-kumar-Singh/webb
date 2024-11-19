@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Student Database</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Student Database</h1>
+    
+    <div>
+        <div class="input-group">
+            <label for="studentName">Name:</label>
+            <input type="text" id="studentName" placeholder="Enter student name">
+        </div>
+        <div class="input-group">
+            <label for="studentAge">Age:</label>
+            <input type="number" id="studentAge" placeholder="Enter student age">
+        </div>
+        <div class="input-group">
+            <label for="studentGrade">Grade:</label>
+            <input type="text" id="studentGrade" placeholder="Enter student grade">
+        </div>
+        <button id="addUpdateButton" onclick="addOrUpdateStudent()">Add Student</button>
+        <button id="cancelButton" style="display: none;" onclick="cancelUpdate()">Cancel Update</button>
+    </div>
+    
+    <div id="studentTable"></div>
+    
+    <script>
+        // Array to hold student records
+        let students = [];
+        let editIndex = -1;
+
+        // Function to add or update a student
+        function addOrUpdateStudent() {
+            const name = document.getElementById('studentName').value;
+            const age = document.getElementById('studentAge').value;
+            const grade = document.getElementById('studentGrade').value;
+
+            if (name && age && grade) {
+                if (editIndex === -1) {
+                    // Add operation
+                    students.push({ name, age, grade });
+                } else {
+                    // Update operation
+                    students[editIndex] = { name, age, grade };
+                    editIndex = -1;
+                    document.getElementById('addUpdateButton').innerText = 'Add Student';
+                    document.getElementById('cancelButton').style.display = 'none';
+                }
+                displayStudents();
+                clearInputs();
+            } else {
+                alert("Please fill out all fields!");
+            }
+        }
+
+        // Function to display student records in a table
+        function displayStudents() {
+            const tableDiv = document.getElementById('studentTable');
+            if (students.length === 0) {
+                tableDiv.innerHTML = "<p>No students found!</p>";
+                return;
+            }
+
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Grade</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            students.forEach((student, index) => {
+                tableHTML += `
+                    <tr>
+                        <td>${student.name}</td>
+                        <td>${student.age}</td>
+                        <td>${student.grade}</td>
+                        <td>
+                            <button onclick="editStudent(${index})">Edit</button>
+                            <button onclick="deleteStudent(${index})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            tableDiv.innerHTML = tableHTML;
+        }
+
+        // Function to delete a student
+        function deleteStudent(index) {
+            students.splice(index, 1);
+            displayStudents();
+        }
+
+        // Function to edit a student
+        function editStudent(index) {
+            const student = students[index];
+            document.getElementById('studentName').value = student.name;
+            document.getElementById('studentAge').value = student.age;
+            document.getElementById('studentGrade').value = student.grade;
+            editIndex = index;
+            document.getElementById('addUpdateButton').innerText = 'Update Student';
+            document.getElementById('cancelButton').style.display = 'inline';
+        }
+
+        // Function to cancel update
+        function cancelUpdate() {
+            clearInputs();
+            editIndex = -1;
+            document.getElementById('addUpdateButton').innerText = 'Add Student';
+            document.getElementById('cancelButton').style.display = 'none';
+        }
+
+        // Function to clear input fields
+        function clearInputs() {
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentAge').value = '';
+            document.getElementById('studentGrade').value = '';
+        }
+    </script>
+</body>
+</html>

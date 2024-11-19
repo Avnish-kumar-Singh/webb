@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Implementation</title>
+</head>
+<body>
+    <h1>Stack Implementation</h1>
+    <input type="text" id="stackInput" placeholder="Enter value">
+    <button onclick="push()">Push</button>
+    <button onclick="pop()">Pop</button>
+    <button onclick="peek()">Peek</button>
+    <div id="stackDisplay"></div>
+    <div id="peekDisplay" style="margin-top: 10px;"></div>
+
+    <script>
+        // Initialize an empty stack
+        let stack = [];
+
+        // Push operation
+        function push() {
+            const value = document.getElementById("stackInput").value;
+            if (value) {
+                stack.push(value);
+                document.getElementById("stackInput").value = ''; // Clear input
+                displayStack();
+                clearPeek();
+            } else {
+                alert("Please enter a value!");
+            }
+        }
+
+        // Pop operation
+        function pop() {
+            if (stack.length > 0) {
+                stack.pop();
+                displayStack();
+                clearPeek();
+            } else {
+                alert("Stack is empty!");
+            }
+        }
+
+        // Peek operation
+        function peek() {
+            if (stack.length > 0) {
+                document.getElementById("peekDisplay").innerHTML = 
+                    `<p>Peek Value: ${stack[stack.length - 1]}</p>`;
+            } else {
+                alert("Stack is empty!");
+            }
+        }
+
+        // Display the stack
+        function displayStack() {
+            document.getElementById("stackDisplay").innerHTML = 
+                `<p>Stack: [${stack.join(", ")}]</p>`;
+        }
+
+        // Clear the peek display
+        function clearPeek() {
+            document.getElementById("peekDisplay").innerHTML = '';
+        }
+    </script>
+</body>
+</html>
